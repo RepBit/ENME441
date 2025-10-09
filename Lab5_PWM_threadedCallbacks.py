@@ -4,7 +4,7 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 
-p = 23
+p = 25
 f = 0.2 # Hz
 t = 1
 B = math.pow(math.sin(2*math.pi*f*t),2)
@@ -22,5 +22,6 @@ except KeyboardInterrupt:
 pwm.stop()
 
 GPIO.cleanup()
+
 
 
