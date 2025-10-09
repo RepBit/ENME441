@@ -4,15 +4,23 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 
-pin = 25
+pinNum = [2, 3, 4, 14, 15, 18, 17, 27, 22, 23]
+button = 24
+
 freq = 0.2
 PWM_freq = 500
+phi = math.pi/11
 
-GPIO.setup(pin, GPIO.OUT)
-pwm = GPIO.PWM(pin, PWM_freq)
+for p in pinNum:    
+    GPIO.setup(p, GPIO.OUT, initial = 0)
+
+GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+pwms = [GPIO.PWM(p, PWM_freq) for p in pinNum)]
 
 try:
-    pwm.start(0)
+    for pwm in pwms:
+    pwn.start(0);
     
     while True:
         t = time.time()
