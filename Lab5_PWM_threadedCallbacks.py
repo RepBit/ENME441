@@ -14,7 +14,7 @@ pwm = GPIO.PWM(p, 500)
 
 try:
   pwm.start(B)
-  while true:
+  while True:
     pass
 except KeyboardInterrupt:
     print("\nExiting")
@@ -22,4 +22,5 @@ except KeyboardInterrupt:
 pwm.stop()
 
 GPIO.cleanup()
+
 
