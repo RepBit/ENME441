@@ -10,9 +10,10 @@ PWM_freq = 500
 
 GPIO.setup(pin, GPIO.OUT)
 pwm = GPIO.PWM(pin, PWM_freq)
-pwm.start(0)
 
 try:
+    pwm.start(0)
+    
     while True:
         t = time.time()
         B = math.sin(2 * math.pi * freq * t) ** 2
@@ -24,6 +25,7 @@ except KeyboardInterrupt:
   
 pwm.stop()
 GPIO.cleanup()
+
 
 
 
