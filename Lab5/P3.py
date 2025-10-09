@@ -16,7 +16,7 @@ for p in pinNum:
 
 GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-pwms = [GPIO.PWM(p, PWM_freq) for p in pinNum)]
+pwms = [GPIO.PWM(p, PWM_freq) for p in pinNum]
 
 def switch(pin):
     global phi
