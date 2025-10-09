@@ -1,3 +1,7 @@
+import RPi.GPIO as GPIO
+import math
+import time
+
 GPIO.setmode(GPIO.BCM)
 
 pin = 25
@@ -20,6 +24,7 @@ except KeyboardInterrupt:
   
 pwm.stop()
 GPIO.cleanup()
+
 
 
 
