@@ -18,18 +18,30 @@ GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 pwms = [GPIO.PWM(p, PWM_freq) for p in pinNum)]
 
+def switch(pin):
+    global phi
+    phi *= -1
+    print("Switch direction")
+
+GPIO.add_event_detect(button, GPIO.RISING, callback=switch, bouncetime=100)
+
 try:
     for pwm in pwms:
     pwn.start(0);
     
     while True:
         t = time.time()
-        B = math.sin(2 * math.pi * freq * t) ** 2
-        duty = B * 100
-        pwm.ChangeDutyCycle(duty)
+        for i,p in enumerate(pwms):
+            B = math.sin(2 * math.pi * freq * t - phi * i) ** 2
+            p.ChangeDutyCycle(B*100)
 
 except KeyboardInterrupt:
     print("\nExiting")
   
 pwm.stop()
 GPIO.cleanup()
+
+
+
+
+
