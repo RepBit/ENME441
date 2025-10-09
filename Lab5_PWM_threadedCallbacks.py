@@ -1,8 +1,8 @@
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import math
 import time
 
-#GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
 p = 23
 f = 0.2 # Hz
@@ -22,3 +22,4 @@ except KeyboardInterrupt:
 pwm.stop()
 
 GPIO.cleanup()
+
