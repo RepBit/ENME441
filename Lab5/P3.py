@@ -27,7 +27,7 @@ GPIO.add_event_detect(button, GPIO.RISING, callback=switch, bouncetime=100)
 
 try:
     for pwm in pwms:
-    pwn.start(0);
+        pwn.start(0)
     
     while True:
         t = time.time()
