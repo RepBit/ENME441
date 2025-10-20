@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-from Bug
+import Bug
 
 # --- GPIO Setup ---
 GPIO.setmode(GPIO.BCM)
