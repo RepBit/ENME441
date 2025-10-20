@@ -73,7 +73,8 @@ class Bug:
             print("on")
         else:
             # Clamp movement within the LED range
-            new_x = max(0, min(7, new_x))
+            if new_x < 0: new_x = 0
+            elif new_x > 7: new_x = 7
             print("off")
 
         self.x = new_x
