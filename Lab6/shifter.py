@@ -20,7 +20,6 @@ class Shifter:
         GPIO.output(pin, 0)
 
     def shiftByte(self, b):
-
         for i in range(8):
             GPIO.output(self.serialPin, b & (1 << i))
             self.__ping(self.clockPin) 
@@ -28,7 +27,6 @@ class Shifter:
 
 
 class Bug:
-
     def __init__(self, serialPin, clockPin, latchPin, timestep=0.1, x=3, isWrapOn=False):
         self.timestep = timestep
         self.x = x
@@ -56,7 +54,7 @@ class Bug:
             if new_x < 0: new_x = 0
             elif new_x > 7: new_x = 7
             print("off")
-
+            
         self.x = new_x
 
     def start(self):
