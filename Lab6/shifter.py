@@ -77,7 +77,7 @@ class Bug:
             if new_x < 0:
                 new_x = 0
             elif new_x > 7:
-                new_x = 7
+                new_x = 6
 
         self.x = new_x
 
@@ -104,18 +104,11 @@ class Bug:
         print("\nBug stopped and GPIO cleaned up.")
 
 
-'''
-if __name__ == "__main__":
-  try:
-    shifter = Shifter(serialPin=23, clockPin=25, latchPin=24)
-    pattern = 0b01100110
 
-    shifter.shiftByte(pattern)
-    
-    while 1: pass
-      
-  except KeyboardInterrupt:
-        GPIO.cleanup()
-'''
+
+
+
+
+
 
 
