@@ -30,6 +30,7 @@ try:
         
         time.sleep(delay)
 
+'''
 try:
     while True:
         # Compute pattern: single '1' bit representing the active LED
@@ -47,6 +48,7 @@ try:
             position = num_leds - 1
 
         time.sleep(delay)
+    '''
 
 except KeyboardInterrupt:
     GPIO.cleanup()
