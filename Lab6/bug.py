@@ -5,9 +5,9 @@ from shifter import Bug
 # --------------------------
 # GPIO input pins
 # --------------------------
-s1_pin = 5   # Switch to start/stop the bug
-s2_pin = 6   # Switch to toggle wrap mode
-s3_pin = 13  # Switch to increase speed (reduce delay)
+s1_pin = 17   # Switch to start/stop the bug
+s2_pin = 27   # Switch to toggle wrap mode
+s3_pin = 22  # Switch to increase speed (reduce delay)
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(s1_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
