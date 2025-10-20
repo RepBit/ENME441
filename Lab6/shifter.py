@@ -19,6 +19,7 @@ class Shifter:
     GPIO.output(pin, 0)
 
   def shiftByte(self, b): #public
+    GPIO.output(self.latchPin, 0)  # keep latch low while shifting
     for i in range(8):
       GPIO.output(self.serialPin, b & (1 << i))
       self.__ping(self.clockPin)    # add bit to register
