@@ -77,8 +77,9 @@ class Bug:
             elif new_x > 7: new_x = 7
             print("off")
         '''
+      
         if new_x < 0: new_x = 0
-        elif new_x > 7: new_x = 7
+        elif new_x > 8: new_x = 7
 
         self.x = new_x
 
