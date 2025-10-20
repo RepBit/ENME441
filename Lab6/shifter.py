@@ -21,7 +21,7 @@ class Shifter:
     for i in range(8):
       GPIO.output(self.serialPin, b & (1 << i))
       self.__ping(self.clockPin)    # add bit to register
-    self.__ping(self.latchPin)      # send register to output
+      self.__ping(self.latchPin)      # send register to output
 
 
 if __name__ == "__main__":
