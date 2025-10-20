@@ -36,7 +36,7 @@ class Bug:
         """Private helper for one random step (-1 or +1) with boundary logic."""
         step = random.choice([-1, 1])
         new_x = self.x + step
-
+        '''
         if self.isWrapOn:
             # Wrap around from one edge to the other
             new_x %= 8
@@ -46,6 +46,11 @@ class Bug:
                 new_x = 0
             elif new_x > 7:
                 new_x = 7
+        '''
+        if new_x < 0:
+            new_x = 0    
+        elif new_x > 7:
+            new_x = 7
 
         self.x = new_x
 
