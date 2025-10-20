@@ -53,7 +53,7 @@ try:
             bug._Bug__move()
 
         time.sleep(bug.timestep)
-        print(bug.isWrapOn + "\n")
+        print(str(bug.isWrapOn) + "\n")
 
 except KeyboardInterrupt:
     bug.stop()
