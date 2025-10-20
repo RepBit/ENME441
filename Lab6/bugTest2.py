@@ -29,6 +29,10 @@ try:
         shifter.shiftByte(array[position-1])
         
         time.sleep(delay)
+except KeyboardInterrupt:
+    GPIO.cleanup()
+    print("\nProgram stopped and GPIO cleaned up.")
+
 
 '''
 try:
@@ -49,7 +53,3 @@ try:
 
         time.sleep(delay)
     '''
-
-except KeyboardInterrupt:
-    GPIO.cleanup()
-    print("\nProgram stopped and GPIO cleaned up.")
