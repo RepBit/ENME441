@@ -12,17 +12,18 @@ class Shifter:
         GPIO.setup(self.serialPin, GPIO.OUT)
         GPIO.setup(self.clockPin, GPIO.OUT, initial=0)
         GPIO.setup(self.latchPin, GPIO.OUT, initial=0)
-
+  
     def __ping(self, pin):
         GPIO.output(pin, 1)
-        time.sleep(0)  # short pulse
+        time.sleep(0)
         GPIO.output(pin, 0)
 
     def shiftByte(self, b):
-        for i in range(8):
-            GPIO.output(self.serialPin, b & (1 << i))
+        GPIO.output(self.latchPin, 0)           # latch low
+        for i in range(7, -1, -1):              # shift MSB first
+            GPIO.output(self.serialPin, (b >> i) & 1)
             self.__ping(self.clockPin)
-        self.__ping(self.latchPin)
+        GPIO.output(self.latchPin, 1)           # update LEDs
 
 
 class Bug:
@@ -32,41 +33,34 @@ class Bug:
         self.isWrapOn = isWrapOn
         self.__shifter = Shifter(serialPin, clockPin, latchPin)
         self.__running = False
-        self.__led_array = [1, 2, 4, 8, 16,32,64,128]  # 8-bit LED patterns
-
-    # --------------------------
-    # Private methods
-    # --------------------------
-    def __display(self):
-        self.__shifter.shiftByte(self.__led_array[self.x])
-
-    def __clear(self):
-        self.__shifter.shiftByte(0)
-
-    def __move(self):
-        step = random.choice([-1, 1])
-        new_x = self.x + step
-
-        if self.isWrapOn:
-            if new_x < 0: new_x = 7
-            elif new_x > 7: new_x = 0
-        else:
-            if new_x < 0: new_x = 0
-            elif new_x > 7: new_x = 7
-        self.x = new_x
-
+        self.__led_array = [1, 2, 4, 8, 16, 32, 64, 128]
+    
     def start(self):
         self.__running = True
+        self.__shifter.shiftByte(0)
+        print("Bug started! Press Ctrl+C to stop.")
         try:
             while self.__running:
-                self.__display()
+                step = random.choice([-1, 1])
+                new_x = self.x + step
+                
+                if self.isWrapOn:
+                    if new_x < 0: new_x = 7
+                    elif new_x > 7: new_x = 0
+                    print("Wrap ON")
+                else:
+                    if new_x < 0: new_x = 0
+                    elif new_x > 7: new_x = 7
+                    print("Wrap OFF")
+                
+                self.x = new_x
+                self.__shifter.shiftByte(self.__led_array[self.x])
                 time.sleep(self.timestep)
-                self.__move()
         except KeyboardInterrupt:
             self.stop()
 
     def stop(self):
         self.__running = False
-        self.__clear()
+        self.__shifter.shiftByte(0)
         GPIO.cleanup()
         print("\nBug stopped and GPIO cleaned up.")
