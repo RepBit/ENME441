@@ -63,7 +63,7 @@ class Bug:
         """Perform one random step (-1 or +1) and update position."""
         step = random.choice([-1, 1])
         new_x = self.x + step
-
+'''
         if self.isWrapOn:
             # Wrap around from one edge to the other
             #Can't use new_x %= 8 because of IndexError if try to access element at -9 with only 8 element
@@ -76,6 +76,9 @@ class Bug:
             if new_x < 0: new_x = 0
             elif new_x > 7: new_x = 7
             print("off")
+  '''
+        if new_x < 0: new_x = 0
+        elif new_x > 7: new_x = 7
 
         self.x = new_x
 
