@@ -77,7 +77,7 @@ class Bug:
             if new_x < 0:
                 new_x = 0
             elif new_x > 7:
-                new_x = 6
+                new_x = 8
 
         self.x = new_x
 
