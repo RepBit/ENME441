@@ -11,7 +11,6 @@ GPIO.setup(s1_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(s2_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(s3_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-
 bug = Bug(serialPin=23, clockPin=24, latchPin=25, timestep=0.1)
 
 prev_s2_state = GPIO.input(s2_pin)
@@ -22,7 +21,6 @@ try:
         s2 = GPIO.input(s2_pin)
         s3 = GPIO.input(s3_pin)
 
-
         if s1 and not bug._Bug__running:
             bug._Bug__running = True
         elif not s1 and bug._Bug__running:
@@ -32,7 +30,6 @@ try:
         if s2 != prev_s2_state:
             bug.isWrapOn = not bug.isWrapOn
             prev_s2_state = s2
-
 
         if s3:
             bug.timestep = 0.1/3
