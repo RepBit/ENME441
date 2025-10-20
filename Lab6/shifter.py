@@ -36,6 +36,7 @@ class Bug:
     
   def start(self):
     self.__running = True
+    self.__shifter.shiftByte(0)
     try:
       while self.__running:
         step = random.choice([-1, 1])
@@ -50,6 +51,8 @@ class Bug:
           if new_x < 0: new_x = 0
           elif new_x > 7: new_x = 7
           print("off")
+          
+        self.x = new_x
         
         self.__shifter.shiftByte(self.__led_array[self.x])
       
