@@ -35,7 +35,9 @@ class Bug:
     def __move(self):
         """Private helper for one random step (-1 or +1) with boundary logic."""
         step = random.choice([-1, 1])
-        new_x = self.x + step
+        #new_x = self.x + step
+        self.x += step
+        
         '''
         if self.isWrapOn:
             # Wrap around from one edge to the other
@@ -47,12 +49,12 @@ class Bug:
             elif new_x > 7:
                 new_x = 7
         '''
-        if new_x < 0:
-            new_x = 0    
-        elif new_x > 7:
-            new_x = 7
+        if self.x < 0:
+            self.x = 0    
+        elif self.x > 7:
+            self.x = 7
 
-        self.x = new_x
+        #self.x = new_x
 
     def start(self):
         """Start the bug’s random walk movement."""
