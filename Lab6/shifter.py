@@ -76,8 +76,8 @@ class Bug:
             # Clamp movement within the LED range
             if new_x < 0:
                 new_x = 0
-            elif new_x > 8:
-                new_x = 8
+            elif new_x > 7:
+                new_x = 7
 
         self.x = new_x
 
