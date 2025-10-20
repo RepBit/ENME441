@@ -65,9 +65,19 @@ class Bug:
         new_x = self.x + step
 
         if self.isWrapOn:
-            new_x %= 8  # wrap around
+            # Wrap around from one edge to the other
+            #Can't use new_x %= 8 because of IndexError if try to access element at -9 with only 8 element
+            #P.S -1 to -8 is accessible element
+            if new_x < 0:
+                new_x = 7
+            elif new_x > 7:
+                new_x = 0
         else:
-            new_x = max(0, min(7, new_x))  # clamp between 0–7
+            # Clamp movement within the LED range
+            if new_x < 0:
+                new_x = 0
+            elif new_x > 7:
+                new_x = 7
 
         self.x = new_x
 
