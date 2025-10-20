@@ -1,67 +1,58 @@
 import RPi.GPIO as GPIO
 import time
-from shifter import Bug  # Assuming your previous code is in shifter.py
+from shifter import Bug
 
-# --- GPIO setup for switches ---
-s1_pin = 5  # On/off switch
-s2_pin = 6  # Wrap toggle
-s3_pin = 13 # Speed multiplier
+# --------------------------
+# GPIO input pins
+# --------------------------
+s1_pin = 5   # Switch to start/stop the bug
+s2_pin = 6   # Switch to toggle wrap mode
+s3_pin = 13  # Switch to increase speed (reduce delay)
 
 GPIO.setmode(GPIO.BCM)
-for pin in [s1_pin, s2_pin, s3_pin]:
-    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # use pull-down resistors
+GPIO.setup(s1_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(s2_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(s3_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-# --- Initialize Bug ---
-bug = Bug(serialPin=17, clockPin=27, latchPin=22)  # adjust pins for your shift register
+# --------------------------
+# Instantiate Bug
+# --------------------------
+bug = Bug(serialPin=23, clockPin=24, latchPin=25, timestep=0.1)
 
 # Track previous state of s2 to detect changes
 prev_s2_state = GPIO.input(s2_pin)
 
 try:
     while True:
-        s1_state = GPIO.input(s1_pin)
-        s2_state = GPIO.input(s2_pin)
-        s3_state = GPIO.input(s3_pin)
+        # --- Read switch states ---
+        s1 = GPIO.input(s1_pin)
+        s2 = GPIO.input(s2_pin)
+        s3 = GPIO.input(s3_pin)
 
-        # --- Handle Bug on/off ---
-        if s1_state and not bug._Bug__running:  # start if not running
-            print("Starting Bug")
+        # --- Control bug start/stop ---
+        if s1 and not bug._Bug__running:  # private attribute access
             bug._Bug__running = True
-            bug._Bug__shifter.shiftByte(0)
-        elif not s1_state and bug._Bug__running:  # stop if running
-            print("Stopping Bug")
+        elif not s1 and bug._Bug__running:
             bug._Bug__running = False
-            bug._Bug__shifter.shiftByte(0)
+            bug._Bug__clear()
 
-        # --- Handle wrapping toggle on s2 edge ---
-        if s2_state != prev_s2_state and s2_state == 1:  # rising edge
+        # --- Toggle wrap mode when s2 changes ---
+        if s2 != prev_s2_state:
             bug.isWrapOn = not bug.isWrapOn
-            print(f"Wrap toggled: {bug.isWrapOn}")
-        prev_s2_state = s2_state
+            prev_s2_state = s2
 
-        # --- Handle speed multiplier ---
-        if s3_state:
-            timestep = max(bug.timestep / 3, 0.01)
+        # --- Adjust speed when s3 is on ---
+        if s3:
+            bug.timestep = max(0.01, 0.1 / 3)  # increase speed by 3x
         else:
-            timestep = bug.timestep
+            bug.timestep = 0.1  # default speed
 
-        # --- Move Bug if running ---
+        # --- If bug is running, move & display ---
         if bug._Bug__running:
-            import random
-            step = random.choice([-1, 1])
-            new_x = bug.x + step
+            bug._Bug__display()
+            bug._Bug__move()
 
-            if bug.isWrapOn:
-                if new_x < 0: new_x = 7
-                elif new_x > 7: new_x = 0
-            else:
-                new_x = max(0, min(7, new_x))
-
-            bug.x = new_x
-            bug._Bug__shifter.shiftByte(bug._Bug__led_array[bug.x])
-
-        time.sleep(timestep)
+        time.sleep(bug.timestep)
 
 except KeyboardInterrupt:
     bug.stop()
-    print("Program terminated by user")
