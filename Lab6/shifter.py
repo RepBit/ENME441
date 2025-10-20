@@ -25,8 +25,6 @@ class Shifter:
       self.__ping(self.latchPin)      # send register to output
 
 class Bug:
-    """Encapsulates the behavior of a moving LED ("bug") on an 8-bit LED bar."""
-
   def __init__(self, serialPin, clockPin, latchPin, timestep=0.1, x=3, isWrapOn=False):
     self.timestep = timestep
     self.x = x
