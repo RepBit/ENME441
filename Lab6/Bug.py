@@ -3,7 +3,6 @@ import random
 import RPi.GPIO as GPIO
 from shifter import Shifter
 
-
 class Bug:
     def __init__(self, serialPin, clockPin, latchPin, timestep=0.1, x=3, isWrapOn=False):
         """
