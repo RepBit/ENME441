@@ -72,12 +72,16 @@ class Bug:
                 new_x = 7
             elif new_x > 7:
                 new_x = 0
+        time.sleep(0.1)
+        print("on")
         else:
             # Clamp movement within the LED range
             if new_x < 0:
                 new_x = 0
             elif new_x > 7:
-                new_x = 8
+                new_x = 7
+        time.sleep(0.1)
+        print("off")
 
         self.x = new_x
 
