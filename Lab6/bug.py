@@ -43,7 +43,7 @@ try:
 
         # --- Adjust speed when s3 is on ---
         if s3:
-            bug.timestep = 0.1/3
+            bug.timestep = max(0.01, 0.1 / 3)  # increase speed by 3x
         else:
             bug.timestep = 0.1  # default speed
 
