@@ -1,58 +1,69 @@
+import RPi.GPIO as GPIO
 import time
 import random
-import RPi.GPIO as GPIO
-from shifter import Shifter
+
+
+class Shifter:
+    def __init__(self, serialPin, clockPin, latchPin):
+        self.serialPin = serialPin
+        self.clockPin = clockPin
+        self.latchPin = latchPin
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.serialPin, GPIO.OUT)
+        GPIO.setup(self.clockPin, GPIO.OUT, initial=0)
+        GPIO.setup(self.latchPin, GPIO.OUT, initial=0)
+
+    def __ping(self, pin):  # private helper
+        GPIO.output(pin, 1)
+        time.sleep(0)
+        GPIO.output(pin, 0)
+
+    def shiftByte(self, b):  # public method
+        for i in range(8):
+            GPIO.output(self.serialPin, b & (1 << i))
+            self.__ping(self.clockPin)  # add bit to register
+            self.__ping(self.latchPin)  # send register to output
+
 
 class Bug:
     def __init__(self, serialPin, clockPin, latchPin, timestep=0.1, x=3, isWrapOn=False):
-        """ Initialize a Bug that moves an LED on a shift register display. """
         self.timestep = timestep
         self.x = x
         self.isWrapOn = isWrapOn
-        self._shifter = Shifter(serialPin, clockPin, latchPin)  # composition
-        self.running = False  # public flag
-
-        # 8-bit LED pattern
-        self.led_array = [1, 2, 4, 8, 16, 32, 64, 128]
-
-    # --- Private helpers ---
-    def __display(self):
-        self._shifter.shiftByte(self.led_array[self.x])
-
-    def __clear(self):
-        self._shifter.shiftByte(0)
-
-    def __move(self):
-        step = random.choice([-1, 1])
-        new_x = self.x + step
-        if self.isWrapOn:
-            new_x %= 8
-        else:
-            new_x = max(0, min(7, new_x))
-        self.x = new_x
-
-    # --- Public control methods ---
-    def start_step(self):
-        """Do a single movement step (display + move)."""
-        if not self.running:
-            return
-        self.__display()
-        self.__move()
+        self.__shifter = Shifter(serialPin, clockPin, latchPin)
+        self.__running = False
+        self.__led_array = [1, 2, 4, 8, 16, 32, 64, 128]
 
     def start(self):
-        """Run the Bug continuously (blocking)."""
-        self.running = True
-        print("Bug started! Press Ctrl+C to stop.")
+        self.__running = True
         try:
-            while self.running:
-                self.start_step()
+            while self.__running:
+                step = random.choice([-1, 1])
+                new_x = self.x + step
+
+                if self.isWrapOn:
+                    if new_x < 0:
+                        new_x = 7
+                    elif new_x > 7:
+                        new_x = 0
+                    print("on")
+                else:  # clamp movement within the LED range
+                    if new_x < 0:
+                        new_x = 0
+                    elif new_x > 7:
+                        new_x = 7
+                    print("off")
+
+                self.x = new_x
+                self.__shifter.shiftByte(self.__led_array[self.x])
                 time.sleep(self.timestep)
+
         except KeyboardInterrupt:
             self.stop()
 
     def stop(self):
-        """Stop Bug movement and clear LEDs."""
-        self.running = False
-        self.__clear()
+        self.__running = False
+        self.__shifter.shiftByte(0)
         GPIO.cleanup()
         print("\nBug stopped and GPIO cleaned up.")
