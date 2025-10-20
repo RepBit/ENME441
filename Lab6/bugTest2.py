@@ -23,8 +23,8 @@ try:
 
         if position < 1:
             position = 1
-        elif position > num_leds-1:
-            position = num_leds-1
+        elif position > num_leds:
+            position = num_leds
         
         shifter.shiftByte(array[position-1])
         
