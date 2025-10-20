@@ -22,7 +22,7 @@ class Shifter:
       GPIO.output(self.serialPin, b & (1 << i))
       self.__ping(self.clockPin)    # add bit to register
       self.__ping(self.latchPin)      # send register to output
-
+      
 
 if __name__ == "__main__":
   try:
@@ -31,9 +31,8 @@ if __name__ == "__main__":
 
     shifter.shiftByte(pattern)
     
-    while True:
-            pass
-  
+    while 1: pass
+      
   except KeyboardInterrupt:
         GPIO.cleanup()
 
