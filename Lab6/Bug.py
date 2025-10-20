@@ -55,8 +55,8 @@ class Bug:
         print("Bug started! Press Ctrl+C to stop.")
         try:
             while self.__running:
-                self.__move()
                 self.__display()
+                self.__move()
                 time.sleep(self.timestep)
         except KeyboardInterrupt:
             self.stop()
