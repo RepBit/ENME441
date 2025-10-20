@@ -15,7 +15,7 @@ class Shifter:
 
     def __ping(self, pin):
         GPIO.output(pin, 1)
-        time.sleep(0.001)  # short pulse
+        time.sleep(0)  # short pulse
         GPIO.output(pin, 0)
 
     def shiftByte(self, b):
@@ -32,7 +32,7 @@ class Bug:
         self.isWrapOn = isWrapOn
         self.__shifter = Shifter(serialPin, clockPin, latchPin)
         self.__running = False
-        self.__led_array = [1 << i for i in range(8)]  # 8-bit LED patterns
+        self.__led_array = [1, 2, 4, 8, 16,32,64,128]  # 8-bit LED patterns
 
     # --------------------------
     # Private methods
@@ -48,10 +48,11 @@ class Bug:
         new_x = self.x + step
 
         if self.isWrapOn:
-            new_x %= 8
+            if new_x < 0: new_x = 7
+            elif new_x > 7: new_x = 0
         else:
-            new_x = max(0, min(7, new_x))
-
+            if new_x < 0: new_x = 0
+            elif new_x > 7: new_x = 7
         self.x = new_x
 
     def start(self):
