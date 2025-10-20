@@ -33,42 +33,7 @@ class Bug:
     self.__running = False
     
     self.__led_array = [1, 2, 4, 8, 16, 32, 64, 128]
-
-  def __display(self):
-      """Light up LED at current position."""
-    self.__shifter.shiftByte(self.__led_array[self.x])
-
-  def __clear(self):
-      """Turn off all LEDs."""
-      self.__shifter.shiftByte(0)
-
-  def __move(self):
-      """Perform one random step (-1 or +1) and update position."""
-      step = random.choice([-1, 1])
-      new_x = self.x + step
-      '''
-      if self.isWrapOn:
-          # Wrap around from one edge to the other
-          #Can't use new_x %= 8 because of IndexError if try to access element at -9 with only 8 element
-          #P.S -1 to -8 is accessible element
-          if new_x < 0: new_x = 7
-          elif new_x > 7: new_x = 0
-          print("on")
-      else:
-          # Clamp movement within the LED range
-          if new_x < 0: new_x = 0
-          elif new_x > 7: new_x = 7
-          print("off")
-      '''
     
-      if new_x < 0: new_x = 0
-      elif new_x > 7: new_x = 4
-
-      self.x = new_x
-
-  # --------------------------
-  # Public methods
-  # --------------------------
   def start(self):
     self.__running = True
     try:
@@ -95,7 +60,7 @@ class Bug:
 
   def stop(self):
     self.__running = False
-    self.__clear()
+    self.__shifter.shiftByte(0)
     GPIO.cleanup()
     print("\nBug stopped and GPIO cleaned up.")
 
