@@ -3,15 +3,15 @@ import RPi.GPIO as GPIO
 import json
 
 # GPIO setup
-led_pins = [17, 27, 22]
+LED_PINS  = [17, 27, 22]
 GPIO.setmode(GPIO.BCM)
 
-pwms = []
-for pin in led_pins:
+pwm_leds = []
+for pin in LED_PINS :
     GPIO.setup(pin, GPIO.OUT)
     pwm = GPIO.PWM(pin, 500)
     pwm.start(0)
-    pwms.append(pwm)
+    pwm_leds.append(pwm)
 
 brightness_levels = [0, 0, 0]  # Store current brightness % for each LED
 
