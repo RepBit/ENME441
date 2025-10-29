@@ -2,18 +2,18 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse
 import RPi.GPIO as GPIO
 
-# --- Setup GPIO ---
-LED_PINS = [17, 27, 22]  # GPIO pins for LED1, LED2, LED3
+# Setup GPIO
+LED_PINS = [17, 27, 22]
 GPIO.setmode(GPIO.BCM)
 for pin in LED_PINS:
     GPIO.setup(pin, GPIO.OUT)
 
-# Create PWM objects (frequency = 1000 Hz)
-pwm_leds = [GPIO.PWM(pin, 1000) for pin in LED_PINS]
+# Create PWM objects (frequency = 500 Hz)
+pwm_leds = [GPIO.PWM(pin, 500) for pin in LED_PINS]
 for pwm in pwm_leds:
     pwm.start(0)
 
-# Store brightness (0–100)
+# Record brightness level (0–100)
 brightness = [0, 0, 0]
 
 
@@ -101,7 +101,10 @@ class LEDHandler(BaseHTTPRequestHandler):
 def run(server_class=HTTPServer, handler_class=LEDHandler):
     server_address = ('', 8080)
     httpd = server_class(server_address, handler_class)
-    print("Server running on http://localhost:8080")
+    
+    # Find Pi Zero 2W's IP address with hostname -I, when log into pi zero 2W via ssh
+    
+    print("WebPage running on http://PiZero2_IPaddress:8080")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
