@@ -2,6 +2,17 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse
 import RPi.GPIO as GPIO
 
+# Setup GPIO
+LED_PINS = [17, 27, 22]
+GPIO.setmode(GPIO.BCM)
+for pin in LED_PINS:
+    GPIO.setup(pin, GPIO.OUT)
+
+# Create PWM objects (frequency = 500 Hz)
+pwm_leds = [GPIO.PWM(pin, 500) for pin in LED_PINS]
+for pwm in pwm_leds:
+    pwm.start(0)
+
 # GPIO setup
 led_pins = [17, 27, 22]
 GPIO.setmode(GPIO.BCM)
@@ -12,6 +23,10 @@ for pin in led_pins:
     pwm = GPIO.PWM(pin, 500)
     pwm.start(0)
     pwms.append(pwm)
+
+
+
+
 
 # Record brightness level (0–100)
 brightness = [0, 0, 0]
