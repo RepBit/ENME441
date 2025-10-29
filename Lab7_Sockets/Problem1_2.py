@@ -103,6 +103,9 @@ def run(server_class=HTTPServer, handler_class=LEDHandler):
     httpd = server_class(server_address, handler_class)
     
     # Find Pi Zero 2W's IP address with hostname -I, when log into pi zero 2W via ssh
+        # Pi Zero 2W's IP address: 172.20.10.4
+        # Enter "http://172.20.10.4:8080" into browser URL
+    # Run code with: sudo python3 Problem1_2.py
     
     print("WebPage running on http://PiZero2_IPaddress:8080")
     try:
