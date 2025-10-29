@@ -15,7 +15,6 @@ for pwm in pwm_leds:
 
 # Store brightness (0–100)
 brightness = [0, 0, 0]
-selected_led = 0  # Default selection
 
 
 class LEDHandler(BaseHTTPRequestHandler):
@@ -23,24 +22,20 @@ class LEDHandler(BaseHTTPRequestHandler):
         self.send_form()
 
     def do_POST(self):
-        global selected_led
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         data = urllib.parse.parse_qs(post_data.decode('utf-8'))
 
-        selected_led = int(data.get('led', [0])[0])
+        led_index = int(data.get('led', [0])[0])
         new_brightness = int(data.get('brightness', [0])[0])
 
         # Update LED brightness
-        brightness[selected_led] = new_brightness
-        pwm_leds[selected_led].ChangeDutyCycle(new_brightness)
+        brightness[led_index] = new_brightness
+        pwm_leds[led_index].ChangeDutyCycle(new_brightness)
 
         self.send_form()
 
     def send_form(self):
-        # The slider value should match the selected LED’s brightness
-        current_slider_value = brightness[selected_led]
-
         html = f"""
         <html>
         <head>
@@ -84,12 +79,12 @@ class LEDHandler(BaseHTTPRequestHandler):
             <div class="container">
                 <form method="POST">
                     <label><b>Brightness level:</b></label><br>
-                    <input type="range" name="brightness" min="0" max="100" value="{current_slider_value}"><br><br>
+                    <input type="range" name="brightness" min="0" max="100" value="50"><br><br>
                     
                     <b>Select LED:</b><br>
-                    <label><input type="radio" name="led" value="0" {'checked' if selected_led == 0 else ''}> LED 1 ({brightness[0]}%)</label><br>
-                    <label><input type="radio" name="led" value="1" {'checked' if selected_led == 1 else ''}> LED 2 ({brightness[1]}%)</label><br>
-                    <label><input type="radio" name="led" value="2" {'checked' if selected_led == 2 else ''}> LED 3 ({brightness[2]}%)</label><br><br>
+                    <label><input type="radio" name="led" value="0" checked> LED 1 ({brightness[0]}%)</label><br>
+                    <label><input type="radio" name="led" value="1"> LED 2 ({brightness[1]}%)</label><br>
+                    <label><input type="radio" name="led" value="2"> LED 3 ({brightness[2]}%)</label><br><br>
                     
                     <input type="submit" value="Change Brightness">
                 </form>
