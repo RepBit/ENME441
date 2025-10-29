@@ -15,7 +15,7 @@ for pin in LED_PINS :
 
 brightness_levels = [0, 0, 0]  # Store current brightness % for each LED
 
-# --- HTTP Request Handler ---
+
 class LEDHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -126,7 +126,7 @@ class LEDHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({'status': 'ok'}).encode('utf-8'))
 
-# --- Run Server ---
+
 if __name__ == "__main__":
     try:
         server = HTTPServer(('0.0.0.0', 8080), LEDHandler)
