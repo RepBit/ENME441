@@ -2,13 +2,13 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import RPi.GPIO as GPIO
 import json
 
-# --- GPIO setup ---
-led_pins = [17, 27, 22]  # Adjust pins as needed
+# GPIO setup
+led_pins = [17, 27, 22]
 GPIO.setmode(GPIO.BCM)
 pwms = []
 for pin in led_pins:
     GPIO.setup(pin, GPIO.OUT)
-    pwm = GPIO.PWM(pin, 1000)
+    pwm = GPIO.PWM(pin, 500)
     pwm.start(0)
     pwms.append(pwm)
 
