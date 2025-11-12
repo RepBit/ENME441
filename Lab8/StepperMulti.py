@@ -16,7 +16,7 @@ myArray = multiprocessing.Array('i', 2)
 class Stepper:
     seq = [0b0001, 0b0011, 0b0010, 0b0110, 0b0100, 0b1100, 0b1000, 0b1001]
     delay = 12e3  # microseconds
-    steps_per_degree = 1024 / 360
+    steps_per_degree = 1024 / 360 # 1024 step/rev because of stepper motor 1:16 gear ratio
 
     def __init__(self, shifter, lock, index):
         self.s = shifter
@@ -72,9 +72,9 @@ class Stepper:
         self.angle = 0
 
     def goAngle(self, target_angle):
-        """ Calculate shortest path and queue the movement """
+        """ Calculate shortest path to the targeted location """
         diff = target_angle - self.angle
-        # Choose shortest rotation
+        # Logic for shortest rotation
         if diff > 180:
             diff -= 360
         elif diff < -180:
@@ -96,20 +96,21 @@ if __name__ == '__main__':
     # Queue multiple commands
     m1.goAngle(90)
     m1.goAngle(-45)
+    
     m2.goAngle(-90)
     m2.goAngle(45)
+    
     m1.goAngle(-135)
     m1.goAngle(135)
     m1.goAngle(0)
         
-
-
     # Keep main program running to let motors finish
     try:
         while True:
             time.sleep(0.1)
     except KeyboardInterrupt:
         print("\nExiting")
+
 
 
 
