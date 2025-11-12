@@ -1,15 +1,21 @@
+# stepper_class_shiftregister_multiprocessing.py
+#
+# Stepper class
+#
+# Because only one motor action is allowed at a time, multithreading could be
+# used instead of multiprocessing. However, the GIL makes the motor process run 
+# too slowly on the Pi Zero, so multiprocessing is needed.
+
 import time
 import multiprocessing
-from Shifter import shifter  # your custom module
+from Shifter import shifter  # our custom module
 
-# Shared array for two steppers (integers)
+# Shared memory array across two processes, 1 for each stepper
 myArray = multiprocessing.Array('i', 2)
 
-
 class Stepper:
-    seq = [0b0001, 0b0011, 0b0010, 0b0110,
-           0b0100, 0b1100, 0b1000, 0b1001]
-    delay = 12000  # microseconds
+    seq = [0b0001, 0b0011, 0b0010, 0b0110, 0b0100, 0b1100, 0b1000, 0b1001]
+    delay = 12e3  # microseconds
     steps_per_degree = 1024 / 360
 
     def __init__(self, shifter, lock, index):
@@ -104,6 +110,7 @@ if __name__ == '__main__':
             time.sleep(0.1)
     except KeyboardInterrupt:
         print("\nExiting")
+
 
 
 
