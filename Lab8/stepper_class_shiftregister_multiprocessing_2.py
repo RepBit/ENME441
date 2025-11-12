@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
     # Example test: simultaneous moves
     p1 = m1.goAngle(90)
-    p2 = m2.goAngle(-90)
+    p2 = m2.goAngle(180)
 
     # Wait for both to finish
     p1.join()
