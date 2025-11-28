@@ -1,6 +1,9 @@
 import json
 
-#data = jsondata
+with open("data/config.json", "r") as f:
+    data = json.load(f)
+
+print(data)
 
 TurretData = {}
 BallData = {}
